@@ -1,0 +1,16 @@
+<resources>
+    <string name="app_name">NewsDemo</string>
+    <string name="action_settings">Settings</string>
+    <string name="section_format">Hello World from section: %1$d</string>
+
+    <string name="tabbar_home">Home</string>
+    <string name="tabbar_following">Favourite</string>
+    <string name="tabbar_search">Search</string>
+    <string name="tabbar_notification">Notification</string>
+    <string name="tabbar_profile">About</string>
+
+    <string name="nytimes_api_key">e86955bb5e9bb5e338e287d91b70e238:9:74248941</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+</resources>
