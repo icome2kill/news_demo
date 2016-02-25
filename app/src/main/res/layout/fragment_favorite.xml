@@ -5,7 +5,7 @@
     android:layout_height="match_parent"
     android:paddingLeft="10dp"
     android:paddingRight="10dp"
-    tools:context="com.nguyennk.newsdemo.FavoriteFragment">
+    tools:context=".favourite.FavoriteFragment">
 
     <com.marshalchen.ultimaterecyclerview.UltimateRecyclerView
         android:id="@+id/rv_favourite"

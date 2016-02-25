@@ -1,4 +1,4 @@
-package com.nguyennk.newsdemo;
+package com.nguyennk.newsdemo.home;
 
 import android.app.ProgressDialog;
 import android.content.Intent;
@@ -14,9 +14,11 @@ import android.widget.Toast;
 
 import com.marshalchen.ultimaterecyclerview.UltimateRecyclerView;
 import com.marshalchen.ultimaterecyclerview.divideritemdecoration.HorizontalDividerItemDecoration;
+import com.nguyennk.newsdemo.details.ArticleActivity;
+import com.nguyennk.newsdemo.ArticleAdapter;
+import com.nguyennk.newsdemo.R;
 import com.nguyennk.newsdemo.business.NewYorkTimesApiEndpoint;
 import com.nguyennk.newsdemo.business.NewYorkTimesApiResponse;
-import com.nguyennk.newsdemo.business.NewYorkTimesApiService;
 import com.nguyennk.newsdemo.model.Article;
 
 import java.util.List;
@@ -52,7 +54,7 @@ public class HomeFragment extends Fragment {
 
                 startActivity(intent);
             }
-        }));
+        }, true));
 
         articleList.addItemDecoration(new HorizontalDividerItemDecoration.Builder(getContext()).colorResId(R.color.colorAccent).build());
         articleList.enableDefaultSwipeRefresh(true);
@@ -63,19 +65,19 @@ public class HomeFragment extends Fragment {
             public void onRefresh() {
                 currentPage = 0;
                 articleList.setRefreshing(true);
-                loadArticle();
+                loadArticle(false);
             }
         });
 
         articleList.setOnLoadMoreListener(new UltimateRecyclerView.OnLoadMoreListener() {
             @Override
             public void loadMore(int itemsCount, int maxLastVisiblePosition) {
-                loadArticle();
+                loadArticle(true);
             }
         });
 
         showLoading();
-        loadArticle();
+        loadArticle(false);
 
         return view;
     }
@@ -93,10 +95,12 @@ public class HomeFragment extends Fragment {
             dialog.dismiss();
     }
 
-    private void loadArticle() {
-
-        NewYorkTimesApiEndpoint apiService = NewYorkTimesApiService.getApiService();
-        Call<NewYorkTimesApiResponse> call = apiService.searchArticle(null, currentPage++);
+    private void loadArticle(boolean loadNextPage) {
+        if (loadNextPage) {
+            currentPage = currentPage + 1;
+        }
+        NewYorkTimesApiEndpoint apiService = NewYorkTimesApiEndpoint.Factory.getApiService();
+        Call<NewYorkTimesApiResponse> call = apiService.searchArticle(null, currentPage);
         call.enqueue(new Callback<NewYorkTimesApiResponse>() {
             @Override
             public void onResponse(Response<NewYorkTimesApiResponse> response) {

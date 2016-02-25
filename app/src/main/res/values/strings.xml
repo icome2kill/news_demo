@@ -11,6 +11,7 @@
 
     <string name="nytimes_api_key">e86955bb5e9bb5e338e287d91b70e238:9:74248941</string>
 
+
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>

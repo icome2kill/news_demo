@@ -25,12 +25,16 @@ import butterknife.ButterKnife;
  */
 public class ArticleAdapter extends UltimateViewAdapter<ArticleAdapter.ArticleViewHolder> {
     private static final PrettyTime PRETTY_TIME = new PrettyTime();
+    private static final int VIEW_TYPE_FIRST = 0;
+    private static final int VIEW_TYPE_NORMAL = 1;
 
     private List<Article> data = new ArrayList<>();
     private ArticleAdapterListener itemClickListener;
+    private boolean multipleViewEnable;
 
-    public ArticleAdapter(ArticleAdapterListener itemClickListener) {
+    public ArticleAdapter(ArticleAdapterListener itemClickListener, boolean multipleViewEnable) {
         this.itemClickListener = itemClickListener;
+        this.multipleViewEnable = multipleViewEnable;
     }
 
     public List<Article> getData() {
@@ -48,8 +52,23 @@ public class ArticleAdapter extends UltimateViewAdapter<ArticleAdapter.ArticleVi
     }
 
     @Override
+    public int getItemViewType(int position) {
+        if (!multipleViewEnable) {
+            return VIEW_TYPE_NORMAL;
+        }
+        if (position == 0) {
+            return VIEW_TYPE_FIRST;
+        }
+        return VIEW_TYPE_NORMAL;
+    }
+
+    @Override
     public ArticleViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.news_item_home, parent, false);
+        int layoutId = R.layout.news_item_home;
+        if (viewType == VIEW_TYPE_FIRST) {
+            layoutId = R.layout.news_item_first;
+        }
+        View view = LayoutInflater.from(parent.getContext()).inflate(layoutId, parent, false);
         ArticleViewHolder viewHolder = new ArticleViewHolder(view);
 
         return viewHolder;
@@ -67,11 +86,7 @@ public class ArticleAdapter extends UltimateViewAdapter<ArticleAdapter.ArticleVi
 
     @Override
     public ArticleViewHolder onCreateViewHolder(ViewGroup parent) {
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.news_item_home, parent, false);
-        ArticleViewHolder viewHolder = new ArticleViewHolder(view);
-        view.setTag(viewHolder);
-
-        return viewHolder;
+        return onCreateViewHolder(parent, VIEW_TYPE_NORMAL);
     }
 
     @Override
@@ -86,7 +101,7 @@ public class ArticleAdapter extends UltimateViewAdapter<ArticleAdapter.ArticleVi
         if (multimedia.size() != 0) {
             Article.Multimedia suitableMedia = multimedia.get(0);
             for (Article.Multimedia media : multimedia) {
-                if (media.getHeight() == media.getWidth()) {
+                if ((multipleViewEnable && position == 0 && media.getSubtype().equalsIgnoreCase("wide")) || media.getSubtype().equalsIgnoreCase("thumbnail")) {
                     suitableMedia = media;
                     break;
                 }
@@ -103,16 +118,22 @@ public class ArticleAdapter extends UltimateViewAdapter<ArticleAdapter.ArticleVi
                     holder.imvArticleImage.setVisibility(View.GONE);
                 }
             });
-        } else {
+        } else
+
+        {
             holder.imvArticleImage.setVisibility(View.GONE);
         }
 
-        holder.itemView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                itemClickListener.onItemClick(v, article, position);
-            }
-        });
+        holder.itemView.setOnClickListener(new View.OnClickListener()
+
+                                           {
+                                               @Override
+                                               public void onClick(View v) {
+                                                   itemClickListener.onItemClick(v, article, position);
+                                               }
+                                           }
+
+        );
 
         holder.tvTime.setText(PRETTY_TIME.format(article.getPubDate()));
     }
@@ -142,7 +163,7 @@ public class ArticleAdapter extends UltimateViewAdapter<ArticleAdapter.ArticleVi
         return 0;
     }
 
-    interface ArticleAdapterListener {
+    public interface ArticleAdapterListener {
         void onItemClick(View v, Article article, int position);
     }
 

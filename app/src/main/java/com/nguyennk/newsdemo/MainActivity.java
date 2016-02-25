@@ -9,6 +9,11 @@ import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 
+import com.nguyennk.newsdemo.favourite.FavoriteFragment;
+import com.nguyennk.newsdemo.home.HomeFragment;
+import com.nguyennk.newsdemo.search.SearchFragment;
+import com.nguyennk.newsdemo.section.SectionFragment;
+
 import butterknife.Bind;
 import butterknife.ButterKnife;
 
@@ -19,7 +24,7 @@ public class MainActivity extends AppCompatActivity {
     private static final String TAB_SECTION = "tab_section";
     private static final String TAB_ABOUT = "tab_about";
 
-    private static final String TITLES[] = {"Home", "Favourite", "Search", "About", "About"};
+    private static final String TITLES[] = {"Home", "Section", "Search", "Favourite", "About"};
 
     /**
      * The {@link android.support.v4.view.PagerAdapter} that will provide
@@ -99,11 +104,11 @@ public class MainActivity extends AppCompatActivity {
                 case 0:
                     return new HomeFragment();
                 case 1:
-                    return new FavoriteFragment();
+                    return new SectionFragment();
                 case 2:
                     return new SearchFragment();
                 case 3:
-                    return new Fragment();
+                    return new FavoriteFragment();
             }
             return new Fragment();
         }

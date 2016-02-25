@@ -1,4 +1,4 @@
-package com.nguyennk.newsdemo;
+package com.nguyennk.newsdemo.search;
 
 import android.app.ProgressDialog;
 import android.content.Intent;
@@ -20,9 +20,11 @@ import com.marshalchen.ultimaterecyclerview.UltimateRecyclerView;
 import com.marshalchen.ultimaterecyclerview.UltimateRecyclerviewViewHolder;
 import com.marshalchen.ultimaterecyclerview.UltimateViewAdapter;
 import com.marshalchen.ultimaterecyclerview.divideritemdecoration.HorizontalDividerItemDecoration;
+import com.nguyennk.newsdemo.details.ArticleActivity;
+import com.nguyennk.newsdemo.ArticleAdapter;
+import com.nguyennk.newsdemo.R;
 import com.nguyennk.newsdemo.business.NewYorkTimesApiEndpoint;
 import com.nguyennk.newsdemo.business.NewYorkTimesApiResponse;
-import com.nguyennk.newsdemo.business.NewYorkTimesApiService;
 import com.nguyennk.newsdemo.model.Article;
 
 import java.util.ArrayList;
@@ -138,7 +140,7 @@ public class SearchFragment extends Fragment {
         if (showLoading) {
             showLoading();
         }
-        NewYorkTimesApiEndpoint apiService = NewYorkTimesApiService.getApiService();
+        NewYorkTimesApiEndpoint apiService = NewYorkTimesApiEndpoint.Factory.getApiService();
         Call<NewYorkTimesApiResponse> call = apiService.searchArticle(query, currentPage);
         call.enqueue(new Callback<NewYorkTimesApiResponse>() {
             @Override

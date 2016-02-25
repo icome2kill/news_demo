@@ -1,6 +1,7 @@
-package com.nguyennk.newsdemo;
+package com.nguyennk.newsdemo.favourite;
 
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.Snackbar;
@@ -16,6 +17,9 @@ import com.activeandroid.query.Select;
 import com.marshalchen.ultimaterecyclerview.UltimateRecyclerView;
 import com.marshalchen.ultimaterecyclerview.divideritemdecoration.HorizontalDividerItemDecoration;
 import com.marshalchen.ultimaterecyclerview.itemTouchHelper.SimpleItemTouchHelperCallback;
+import com.nguyennk.newsdemo.ArticleAdapter;
+import com.nguyennk.newsdemo.R;
+import com.nguyennk.newsdemo.details.ArticleActivity;
 import com.nguyennk.newsdemo.model.Article;
 
 import butterknife.Bind;
@@ -43,7 +47,7 @@ public class FavoriteFragment extends Fragment {
 
                 startActivity(intent);
             }
-        });
+        }, false);
 
         rvFavourite.setAdapter(adapter);
 
@@ -80,6 +84,6 @@ public class FavoriteFragment extends Fragment {
                 adapter.getData().add(position, article);
                 adapter.notifyItemInserted(position);
             }
-        }).show();
+        }).setActionTextColor(Color.GREEN).show();
     }
 }

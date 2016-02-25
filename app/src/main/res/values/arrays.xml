@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="sections">
+        <item>World</item>
+        <item>National</item>
+        <item>Business</item>
+        <item>Technology</item>
+        <item>Science</item>
+        <item>Health</item>
+        <item>Sports</item>
+        <item>Arts</item>
+        <item>Fashion &amp; Style</item>
+        <item>Travel</item>
+        <item>Real Estate</item>
+        <item>Opinion</item>
+    </string-array>
+    <array name="section_imgs">
+        <item>@mipmap/section_worldnews</item>
+        <item>@mipmap/section_national</item>
+        <item>@mipmap/section_business</item>
+        <item>@mipmap/section_technology</item>
+        <item>@mipmap/section_science</item>
+        <item>@mipmap/section_health</item>
+        <item>@mipmap/section_sport</item>
+        <item>@mipmap/section_art</item>
+        <item>@mipmap/section_fashion</item>
+        <item>@mipmap/section_travel</item>
+        <item>@mipmap/section_realestate</item>
+        <item>@mipmap/section_opinion</item>
+    </array>
+</resources>
