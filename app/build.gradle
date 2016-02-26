@@ -40,4 +40,5 @@ dependencies {
     compile 'com.android.support:support-v4:23.1.1'
     compile 'com.michaelpardo:activeandroid:3.1.0-SNAPSHOT'
     compile 'org.ocpsoft.prettytime:prettytime:4.0.1.Final'
+    compile 'org.greenrobot:eventbus:3.0.0'
 }

@@ -9,9 +9,11 @@ import android.widget.TextView;
 
 import com.marshalchen.ultimaterecyclerview.UltimateRecyclerviewViewHolder;
 import com.marshalchen.ultimaterecyclerview.UltimateViewAdapter;
+import com.nguyennk.newsdemo.enums.ArticleTextSize;
 import com.nguyennk.newsdemo.model.Article;
 import com.squareup.picasso.Picasso;
 
+import org.greenrobot.eventbus.Subscribe;
 import org.ocpsoft.prettytime.PrettyTime;
 
 import java.util.ArrayList;
@@ -35,6 +37,11 @@ public class ArticleAdapter extends UltimateViewAdapter<ArticleAdapter.ArticleVi
     public ArticleAdapter(ArticleAdapterListener itemClickListener, boolean multipleViewEnable) {
         this.itemClickListener = itemClickListener;
         this.multipleViewEnable = multipleViewEnable;
+    }
+
+    @Subscribe
+    public void onArticleTextSizeChanged(ArticleTextSize textSize) {
+        notifyDataSetChanged();
     }
 
     public List<Article> getData() {
@@ -94,7 +101,11 @@ public class ArticleAdapter extends UltimateViewAdapter<ArticleAdapter.ArticleVi
         final Article article = data.get(position);
 
         holder.tvTitle.setText(article.getHeadline().getMain());
+        holder.tvTitle.setTextSize(AppConfig.getArticleTextSize(holder.itemView.getContext()).getTitleSize());
+
         holder.tvContent.setText(article.getSnippet());
+        holder.tvContent.setTextSize(AppConfig.getArticleTextSize(holder.itemView.getContext()).getSize());
+
         holder.tvSource.setText(article.getSource());
 
         List<Article.Multimedia> multimedia = article.getMultimedia();
@@ -118,21 +129,16 @@ public class ArticleAdapter extends UltimateViewAdapter<ArticleAdapter.ArticleVi
                     holder.imvArticleImage.setVisibility(View.GONE);
                 }
             });
-        } else
-
-        {
+        } else {
             holder.imvArticleImage.setVisibility(View.GONE);
         }
 
-        holder.itemView.setOnClickListener(new View.OnClickListener()
-
-                                           {
+        holder.itemView.setOnClickListener(new View.OnClickListener() {
                                                @Override
                                                public void onClick(View v) {
                                                    itemClickListener.onItemClick(v, article, position);
                                                }
                                            }
-
         );
 
         holder.tvTime.setText(PRETTY_TIME.format(article.getPubDate()));

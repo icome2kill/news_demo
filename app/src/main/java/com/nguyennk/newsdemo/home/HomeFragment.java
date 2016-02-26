@@ -19,7 +19,11 @@ import com.nguyennk.newsdemo.ArticleAdapter;
 import com.nguyennk.newsdemo.R;
 import com.nguyennk.newsdemo.business.NewYorkTimesApiEndpoint;
 import com.nguyennk.newsdemo.business.NewYorkTimesApiResponse;
+import com.nguyennk.newsdemo.enums.ArticleTextSize;
 import com.nguyennk.newsdemo.model.Article;
+
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
 
 import java.util.List;
 
@@ -55,6 +59,7 @@ public class HomeFragment extends Fragment {
                 startActivity(intent);
             }
         }, true));
+        EventBus.getDefault().register(articleList.getAdapter());
 
         articleList.addItemDecoration(new HorizontalDividerItemDecoration.Builder(getContext()).colorResId(R.color.colorAccent).build());
         articleList.enableDefaultSwipeRefresh(true);
@@ -80,6 +85,12 @@ public class HomeFragment extends Fragment {
         loadArticle(false);
 
         return view;
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        EventBus.getDefault().unregister(articleList.getAdapter());
     }
 
     private void showLoading() {
@@ -133,5 +144,22 @@ public class HomeFragment extends Fragment {
                 t.printStackTrace();
             }
         });
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        EventBus.getDefault().register(this);
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        EventBus.getDefault().unregister(this);
+    }
+
+    @Subscribe
+    public void onArticleTextChanged(ArticleTextSize textSize) {
+        articleList.getAdapter().notifyDataSetChanged();
     }
 }

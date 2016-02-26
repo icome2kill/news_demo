@@ -1,18 +1,26 @@
 package com.nguyennk.newsdemo;
 
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 
+import com.nguyennk.newsdemo.enums.ArticleTextSize;
 import com.nguyennk.newsdemo.favourite.FavoriteFragment;
 import com.nguyennk.newsdemo.home.HomeFragment;
 import com.nguyennk.newsdemo.search.SearchFragment;
 import com.nguyennk.newsdemo.section.SectionFragment;
+
+import org.greenrobot.eventbus.EventBus;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -24,7 +32,7 @@ public class MainActivity extends AppCompatActivity {
     private static final String TAB_SECTION = "tab_section";
     private static final String TAB_ABOUT = "tab_about";
 
-    private static final String TITLES[] = {"Home", "Section", "Search", "Favourite", "About"};
+    private static final String TITLES[] = {"Home", "Section", "Search", "Saved", "About"};
 
     /**
      * The {@link android.support.v4.view.PagerAdapter} that will provide
@@ -61,6 +69,7 @@ public class MainActivity extends AppCompatActivity {
 
         // Set up the ViewPager with the sections adapter.
         mViewPager = (ViewPager) findViewById(R.id.container);
+        mViewPager.setOffscreenPageLimit(3);
         mViewPager.setAdapter(mSectionsPagerAdapter);
         mViewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override
@@ -83,10 +92,47 @@ public class MainActivity extends AppCompatActivity {
         tabLayout.setupWithViewPager(mViewPager);
 
         tabLayout.getTabAt(0).setIcon(R.mipmap.tabbar_home).setTag(TAB_HOME);
-        tabLayout.getTabAt(1).setIcon(R.mipmap.tabbar_following).setTag(TAB_FAV);
+        tabLayout.getTabAt(1).setIcon(R.mipmap.tabbar_following).setTag(TAB_SECTION);
         tabLayout.getTabAt(2).setIcon(R.mipmap.tabbar_search).setTag(TAB_SEARCH);
-        tabLayout.getTabAt(3).setIcon(R.mipmap.tabbar_profile).setTag(TAB_SECTION);
+        tabLayout.getTabAt(3).setIcon(R.mipmap.tabbar_profile).setTag(TAB_FAV);
 //        tabLayout.getTabAt(4).setIcon(R.mipmap.tabbar_profile).setTag(TAB_ABOUT);
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        new MenuInflater(this).inflate(R.menu.menu_main, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.action_text_size:
+                showArticleTextSizeOptions();
+                return true;
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
+    private void showArticleTextSizeOptions() {
+        String[] titles = new String[ArticleTextSize.values().length];
+        for (int i = 0; i < titles.length; i++) {
+            titles[i] = ArticleTextSize.values()[i].toString();
+        }
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle("Article text size");
+        builder.setSingleChoiceItems(titles, AppConfig.getArticleTextSize(this).ordinal(), new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                ArticleTextSize articleTextSize = ArticleTextSize.values()[which];
+                AppConfig.setArticleTextSize(MainActivity.this, articleTextSize);
+
+                EventBus.getDefault().post(articleTextSize);
+            }
+        });
+        builder.setCancelable(true);
+        builder.create().show();
     }
 
     /**
@@ -115,7 +161,6 @@ public class MainActivity extends AppCompatActivity {
 
         @Override
         public int getCount() {
-            // Show 3 total pages.
             return 4;
         }
     }

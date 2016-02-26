@@ -20,6 +20,8 @@ import com.nguyennk.newsdemo.business.NewYorkTimesApiResponse;
 import com.nguyennk.newsdemo.details.ArticleActivity;
 import com.nguyennk.newsdemo.model.Article;
 
+import org.greenrobot.eventbus.EventBus;
+
 import java.util.List;
 
 import butterknife.Bind;
@@ -69,6 +71,8 @@ public class SectionActivity extends AppCompatActivity {
                 startActivity(intent);
             }
         }, true));
+        EventBus.getDefault().register(rvArticles.getAdapter());
+
         rvArticles.setDefaultOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
@@ -86,6 +90,12 @@ public class SectionActivity extends AppCompatActivity {
         });
 
         loadArticle(false);
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        EventBus.getDefault().unregister(rvArticles);
     }
 
     @Override

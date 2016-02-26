@@ -22,6 +22,8 @@ import com.nguyennk.newsdemo.R;
 import com.nguyennk.newsdemo.details.ArticleActivity;
 import com.nguyennk.newsdemo.model.Article;
 
+import org.greenrobot.eventbus.EventBus;
+
 import butterknife.Bind;
 import butterknife.ButterKnife;
 
@@ -49,6 +51,7 @@ public class FavoriteFragment extends Fragment {
             }
         }, false);
 
+        EventBus.getDefault().register(adapter);
         rvFavourite.setAdapter(adapter);
 
         adapter.add(new Select().from(Article.class).<Article>execute());
@@ -67,6 +70,12 @@ public class FavoriteFragment extends Fragment {
         helper.attachToRecyclerView(rvFavourite.mRecyclerView);
 
         return view;
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        EventBus.getDefault().unregister(rvFavourite);
     }
 
     private void deleteArticle(final int position, final Article article) {
