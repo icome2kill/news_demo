@@ -2,7 +2,6 @@ package com.nguyennk.newsdemo.details;
 
 import android.os.Bundle;
 import android.support.design.widget.TabLayout;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -14,13 +13,14 @@ import android.widget.Toast;
 
 import com.activeandroid.query.Delete;
 import com.activeandroid.query.Select;
+import com.nguyennk.newsdemo.BaseActivity;
 import com.nguyennk.newsdemo.R;
 import com.nguyennk.newsdemo.model.Article;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
 
-public class ArticleActivity extends AppCompatActivity {
+public class ArticleActivity extends BaseActivity {
     public static final String KEY_ARTICLE = "key_article";
 
     private Article article;

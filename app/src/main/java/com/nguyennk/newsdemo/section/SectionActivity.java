@@ -4,9 +4,10 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.TabLayout;
 import android.support.v4.widget.SwipeRefreshLayout;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.Toolbar;
+import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Toast;
@@ -14,6 +15,7 @@ import android.widget.Toast;
 import com.marshalchen.ultimaterecyclerview.UltimateRecyclerView;
 import com.marshalchen.ultimaterecyclerview.divideritemdecoration.HorizontalDividerItemDecoration;
 import com.nguyennk.newsdemo.ArticleAdapter;
+import com.nguyennk.newsdemo.BaseActivity;
 import com.nguyennk.newsdemo.R;
 import com.nguyennk.newsdemo.business.NewYorkTimesApiEndpoint;
 import com.nguyennk.newsdemo.business.NewYorkTimesApiResponse;
@@ -33,7 +35,7 @@ import retrofit2.Response;
 /**
  * Created by nguye on 2/24/2016.
  */
-public class SectionActivity extends AppCompatActivity {
+public class SectionActivity extends BaseActivity {
     public static final String KEY_SECTION = "key_section";
 
     private String currentSection;
@@ -100,10 +102,22 @@ public class SectionActivity extends AppCompatActivity {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        if (item.getItemId() == android.R.id.home) {
-            finish();
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                finish();
+                return true;
+            case R.id.action_text_size:
+                showArticleTextSizeOptions();
+                return true;
         }
+
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        new MenuInflater(this).inflate(R.menu.menu_main, menu);
+        return true;
     }
 
     private void loadArticle(boolean loadNextPage) {

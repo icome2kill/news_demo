@@ -23,6 +23,8 @@ import com.nguyennk.newsdemo.business.NewYorkTimesApiResponse;
 import com.nguyennk.newsdemo.details.ArticleActivity;
 import com.nguyennk.newsdemo.model.Article;
 
+import org.greenrobot.eventbus.EventBus;
+
 import java.util.List;
 
 import butterknife.Bind;
@@ -113,7 +115,15 @@ public class SearchFragment extends Fragment {
         rvSearchResult.addItemDecoration(new HorizontalDividerItemDecoration.Builder(getContext()).colorResId(R.color.colorAccent).build());
         rvSearchResult.hideEmptyView();
 
+        EventBus.getDefault().register(rvSearchResult.getAdapter());
+
         return view;
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        EventBus.getDefault().unregister(rvSearchResult.getAdapter());
     }
 
     private ProgressDialog dialog;

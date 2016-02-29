@@ -8,9 +8,13 @@ import android.widget.TextView;
 
 import com.marshalchen.ultimaterecyclerview.UltimateRecyclerviewViewHolder;
 import com.marshalchen.ultimaterecyclerview.UltimateViewAdapter;
+import com.nguyennk.newsdemo.AppConfig;
 import com.nguyennk.newsdemo.ArticleAdapter;
 import com.nguyennk.newsdemo.R;
+import com.nguyennk.newsdemo.enums.ArticleTextSize;
 import com.nguyennk.newsdemo.model.Article;
+
+import org.greenrobot.eventbus.Subscribe;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -21,25 +25,27 @@ import butterknife.ButterKnife;
 /**
  * Created by nguye on 2/26/2016.
  */
-public class SearchResultAdapter extends UltimateViewAdapter<SearchResultAdapter.SearchResultViewHolder>{
-    private List<Article> data = new ArrayList<>();
+public class SearchResultAdapter extends UltimateViewAdapter<SearchResultAdapter.SearchResultViewHolder> {
+    private List<Article> onlineArticle = new ArrayList<>();
+
     private ArticleAdapter.ArticleAdapterListener listener;
 
     public SearchResultAdapter(ArticleAdapter.ArticleAdapterListener listener) {
         this.listener = listener;
     }
 
-    public List<Article> getData() {
-        return data;
-    }
-
     public void add(List<Article> newData) {
-        data.addAll(newData);
+        onlineArticle.addAll(newData);
         notifyDataSetChanged();
     }
 
     public void clear() {
-        data.clear();
+        onlineArticle.clear();
+        notifyDataSetChanged();
+    }
+
+    @Subscribe
+    public void onArticleTextSizeChanged(ArticleTextSize textSize) {
         notifyDataSetChanged();
     }
 
@@ -57,11 +63,7 @@ public class SearchResultAdapter extends UltimateViewAdapter<SearchResultAdapter
 
     @Override
     public SearchResultViewHolder onCreateViewHolder(ViewGroup parent) {
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.news_item_search_result, parent, false);
-        SearchResultViewHolder holder = new SearchResultViewHolder(view);
-
-        view.setTag(holder);
-        return holder;
+        return onCreateViewHolder(parent, 0);
     }
 
     @Override
@@ -75,12 +77,12 @@ public class SearchResultAdapter extends UltimateViewAdapter<SearchResultAdapter
 
     @Override
     public int getItemCount() {
-        return data.size();
+        return onlineArticle.size();
     }
 
     @Override
     public int getAdapterItemCount() {
-        return data.size();
+        return onlineArticle.size();
     }
 
     @Override
@@ -90,9 +92,10 @@ public class SearchResultAdapter extends UltimateViewAdapter<SearchResultAdapter
 
     @Override
     public void onBindViewHolder(final SearchResultViewHolder holder, final int position) {
-        final Article article = data.get(position);
+        final Article article = onlineArticle.get(position);
 
         holder.tvTitle.setText(article.getHeadline().getMain());
+        holder.tvTitle.setTextSize(AppConfig.getArticleTextSize(holder.itemView.getContext()).getTitleSize());
 
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -104,11 +107,12 @@ public class SearchResultAdapter extends UltimateViewAdapter<SearchResultAdapter
 
     @Override
     public RecyclerView.ViewHolder onCreateHeaderViewHolder(ViewGroup parent) {
-        return null;
+       return null;
     }
 
     @Override
-    public void onBindHeaderViewHolder(RecyclerView.ViewHolder holder, int position) {}
+    public void onBindHeaderViewHolder(RecyclerView.ViewHolder holder, int position) {
+    }
 
     static class SearchResultViewHolder extends UltimateRecyclerviewViewHolder {
         @Bind(R.id.tv_title)
